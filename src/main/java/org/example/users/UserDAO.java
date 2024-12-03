@@ -2,11 +2,13 @@ package org.example.users;
 
 import org.example.database.DatabaseConnection;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserDAO {
-    public void getCars(){
+    public void getAllUsers(){
         ResultSet rs = null;
         String sql = "SELECT * FROM USERS";
 
@@ -25,15 +27,21 @@ public class UserDAO {
             System.out.println("user_password: " + user_password);
             System.out.println("user_role: " + user_role);
             System.out.println("------------------------");
-        }
-
-//        pstmt.setString(1, users.getUsers_username());
-//        pstmt.setString(2, users.getUsers_password());
-//        pstmt.setString(3, users.getUsers_role());
-//        pstmt.executeUpdate();
+                        }
 
             //Pickup video at ~30 minutes
-//    }
 
+                                                                }
+
+    }
+    public static void addUser(Users user) throws SQLException{
+        String sql = "INSERT INTO Users(User_username, User_password) VALUES (?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection()){
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, Users.getUser_username());
+            preparedStatement.setString(2, Users.getUser_password());
+
+            preparedStatement.executeUpdate();
         }
+    }
 }

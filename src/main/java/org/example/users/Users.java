@@ -3,8 +3,8 @@ package org.example.users;
 public class Users {
 
     private int user_id;
-    private String user_username;
-    private String user_password;
+    private static String user_username;
+    private static String user_password;
     private String user_role;
 
     public Users(String user_username, String user_password, String user_role) {
@@ -28,7 +28,7 @@ public class Users {
         this.user_id = user_id;
     }
 
-    public String getUser_username() {
+    public static String getUser_username() {
         return user_username;
     }
 
@@ -36,7 +36,7 @@ public class Users {
         this.user_username = user_username;
     }
 
-    public String getUser_password() {
+    public static String getUser_password() {
         return user_password;
     }
 

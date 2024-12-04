@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO {
-    public void getAllUsers(){
+    public void getAllUsers() throws SQLException {
         ResultSet rs = null;
         String sql = "SELECT * FROM USERS";
 

@@ -5,18 +5,21 @@ public class Users {
     private int user_id;
     private static String user_username;
     private static String user_password;
+    private static String user_email;
     private String user_role;
 
-    public Users(String user_username, String user_password, String user_role) {
+    public Users(String user_username, String user_password, String user_email, String user_role) {
         this.user_username = user_username;
         this.user_password = user_password;
+        this.user_email = user_email;
         this.user_role = user_role;
     }
 
-    public Users(int user_id, String user_username, String user_password, String user_role) {
+    public Users(int user_id, String user_username, String user_password,String user_email, String user_role) {
         this.user_id = user_id;
         this.user_username = user_username;
         this.user_password = user_password;
+        this.user_email = user_email;
         this.user_role = user_role;
     }
 
@@ -42,6 +45,14 @@ public class Users {
 
     public void setUser_password(String user_password) {
         this.user_password = user_password;
+    }
+
+    public static String getUser_email() {
+        return user_email;
+    }
+
+    public static void setUser_email(String user_email) {
+        Users.user_email = user_email;
     }
 
     public String getUser_role() {

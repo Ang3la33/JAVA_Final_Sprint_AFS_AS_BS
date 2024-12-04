@@ -31,7 +31,8 @@ public class UserDAO {
             }
         }
     }
-        // add a user
+
+    // add a user
     public void addUser(Users user) throws SQLException {
         String sql = "INSERT INTO users (user_username, user_password, user_email, user_role) VALUES (?, ?, ?, ?)";
 
@@ -46,4 +47,26 @@ public class UserDAO {
             pstmt.executeUpdate();
         }
     }
+
+    // Update an existing user
+    public void updateUser(Users user) throws SQLException {
+        String sql = "UPDATE users SET user_role = ? WHERE user_email = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+
+            pstmt.setString(1, user.getUser_role());
+            pstmt.setString(2, user.getUser_email());
+
+
+            int rowsUpdated = pstmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("User updated successfully.");
+            } else {
+                System.out.println("No user found with this email.");
+            }
+        }
+    }
+
 }

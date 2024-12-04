@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 public class UserDAO {
 
+    // fetch all users
     public void getAllUsers() throws SQLException {
         String sql = "SELECT * FROM users";
 
@@ -30,7 +31,7 @@ public class UserDAO {
             }
         }
     }
-
+        // add a user
     public void addUser(Users user) throws SQLException {
         String sql = "INSERT INTO users (user_username, user_password, user_email, user_role) VALUES (?, ?, ?, ?)";
 

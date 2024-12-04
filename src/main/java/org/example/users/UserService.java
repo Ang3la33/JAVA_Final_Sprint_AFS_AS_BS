@@ -15,7 +15,7 @@ public class UserService {
     }
 
     public void addUser(Users user) throws SQLException{
-    UserDAO.addUser(user);
+        userDAO.addUser(user);
     }
 
 }

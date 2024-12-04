@@ -8,40 +8,65 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAO {
-    public void getAllUsers(){
-        ResultSet rs = null;
-        String sql = "SELECT * FROM USERS";
 
-        try(Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql)){
+    // fetch all users
+    public void getAllUsers() throws SQLException {
+        String sql = "SELECT * FROM users";
 
-        rs = pstmt.executeQuery();
-        while(rs.next()) {
-            int user_id = rs.getInt("user_id");
-            String user_username = rs.getString("user_username");
-            String user_password = rs.getString("user_password");
-            String user_role = rs.getString("user_role");
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
 
-            System.out.println("user_id: " + user_id);
-            System.out.println("user_username: " + user_username);
-            System.out.println("user_password: " + user_password);
-            System.out.println("user_role: " + user_role);
-            System.out.println("------------------------");
-                        }
+            while (rs.next()) {
+                int user_id = rs.getInt("user_id");
+                String user_username = rs.getString("user_username");
+                String user_email = rs.getString("user_email");
+                String user_role = rs.getString("user_role");
 
-            //Pickup video at ~30 minutes
-
-                                                                }
-
-    }
-    public static void addUser(Users user) throws SQLException{
-        String sql = "INSERT INTO Users(User_username, User_password) VALUES (?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection()){
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setString(1, Users.getUser_username());
-            preparedStatement.setString(2, Users.getUser_password());
-
-            preparedStatement.executeUpdate();
+                System.out.println("User ID: " + user_id);
+                System.out.println("Username: " + user_username);
+                System.out.println("Email: " + user_email);
+                System.out.println("Role: " + user_role);
+                System.out.println("------------------------");
+            }
         }
     }
+
+    // add a user
+    public void addUser(Users user) throws SQLException {
+        String sql = "INSERT INTO users (user_username, user_password, user_email, user_role) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, user.getUser_username());
+            pstmt.setString(2, user.getUser_password());
+            pstmt.setString(3, user.getUser_email());
+            pstmt.setString(4, user.getUser_role());
+
+            pstmt.executeUpdate();
+        }
+    }
+
+    // Update an existing user
+    public void updateUser(Users user) throws SQLException {
+        String sql = "UPDATE users SET user_role = ? WHERE user_email = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+
+            pstmt.setString(1, user.getUser_role());
+            pstmt.setString(2, user.getUser_email());
+
+
+            int rowsUpdated = pstmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("User updated successfully.");
+            } else {
+                System.out.println("No user found with this email.");
+            }
+        }
+    }
+
 }

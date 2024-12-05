@@ -67,4 +67,56 @@ public class RoleMenu {
         // Display menu again so that user can perform multiple actions without restarting program
         displayBuyerMenu();
     }
+
+    // Seller Menu Method
+    private void displaySellerMenu(int sellerID) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Seller Menu:");
+        System.out.println("1. Add Product");
+        System.out.println("2. Update Product");
+        System.out.println("3. Delete Product");
+        System.out.println("4. View My Products");
+        System.out.println("5. Exit");
+
+        int choice = scanner.nextInt();
+        switch (choice) {
+            case 1:
+                addProduct(sellerID);
+                break;
+            case 2:
+                updateProduct(sellerID);
+                break;
+            case 3:
+                deleteProduct(sellerID);
+                break;
+            case 4:
+                viewSellerProducts(sellerID);
+                break;
+            case 5:
+                return;
+            default:
+                System.out.println("Invalid choice: Enter 1, 2, 3, 4, or 5.");
+        }
+        // Display seller menu again
+        displaySellerMenu(sellerID);
+    }
+
+    // Methods called in Seller Menu
+    // (addProduct, updateProduct, deleteProduct, viewSellerProducts)
+
+    // Add Product Method
+    private void addProduct(int sellerID) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            System.out.println("Enter ")
+        }
+
+    }
+
+
+
+
 }
+
+

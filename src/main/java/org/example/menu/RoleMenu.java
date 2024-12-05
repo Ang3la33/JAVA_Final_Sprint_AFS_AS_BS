@@ -1,5 +1,6 @@
 package org.example.menu;
 
+import org.example.products.Product;
 import org.example.products.ProductService;
 import org.example.users.UserService;
 import org.example.users.Users;
@@ -107,11 +108,65 @@ public class RoleMenu {
     // Add Product Method
     private void addProduct(int sellerID) {
         Scanner scanner = new Scanner(System.in);
+        String name = "";
+        double price = 0.0;
+        int quantity = 0;
 
         try {
-            System.out.println("Enter ")
-        }
+            // Get Product Name
+            while (true) {
+                System.out.println("Enter product name: ");
+                name = scanner.nextLine().trim();
+                if (!name.isEmpty()) {
+                    break;
+                }
+                System.out.println("Invalid input: Product name cannot be empty.");
+            }
 
+            // Get Product Price
+            while (true) {
+                System.out.println("Enter product price: ");
+                if (scanner.hasNextDouble()) {
+                    price = scanner.nextDouble();
+                    if (price > 0) {
+                        break;
+                    }
+                }
+                else {
+                    // Clear invalid input
+                    scanner.next();
+                }
+                System.out.println("Invalid input: Price must be a positive number.");
+            }
+
+            // Get Product Quantity
+            while (true) {
+                System.out.println("Enter product quantity: ");
+                if (scanner.hasNextInt()) {
+                    quantity = scanner.nextInt();
+                    if (quantity >= 0) {
+                        break;
+                    }
+                }
+                else {
+                    // Clear invalid input
+                    scanner.next();
+                }
+                System.out.println("Invalid input: Quantity cannot be negative.");
+            }
+
+            // Create Product
+            Product product = new Product(0, name, price, quantity, sellerID);
+
+            // Add Product using productService
+            productService.addProduct(product);
+
+            System.out.println("Product added successfully!");
+
+        }
+        catch (Exception e) {
+            System.out.println("Error adding product: " + e.getMessage());
+        }
     }
 
 

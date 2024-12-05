@@ -16,7 +16,7 @@ public class ProductService {
     }
 
     // Add a product
-    public void addProduct(Products product) throws SQLException {
+    public void addProduct(org.example.products.Product product) throws SQLException {
         productDAO.addProduct(product);
     }
 

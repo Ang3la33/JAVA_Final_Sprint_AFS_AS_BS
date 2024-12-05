@@ -69,4 +69,56 @@ public class UserDAO {
         }
     }
 
+
+    // Delete user by ID
+
+    public void deleteUser(int user_id) throws SQLException {
+        String sql = "DELETE FROM users WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, user_id);
+
+            int rowsDeleted = pstmt.executeUpdate();
+            if (rowsDeleted > 0) {
+                System.out.println("User with ID " + user_id + " deleted successfully.");
+            } else {
+                System.out.println("No user found with ID " + user_id + ".");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error deleting user: " + e.getMessage());
+            throw e;  // I think this is how this works
+
+        }
+    }
+    // get user by email
+    public Users getUserByEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM users WHERE user_email = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new Users(
+                        rs.getInt("user_id"),
+                        rs.getString("user_username"),
+                        rs.getString("user_password"),
+                        rs.getString("user_email"),
+                        rs.getString("user_role")
+                );
+            }
+        }
+        return null;
+    }
+
+
+
+
+
+
+
 }

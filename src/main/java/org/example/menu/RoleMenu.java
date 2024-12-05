@@ -169,7 +169,89 @@ public class RoleMenu {
         }
     }
 
+    // Update Product Method
+    private void updateProduct(int sellerID) {
+        Scanner scanner = new Scanner(System.in);
+        int productID = 0;
+        String name = "";
+        double price = 0.0;
+        int quantity = 0;
 
+        try {
+
+            // Get Product ID to update
+            while (true) {
+                System.out.println("Enter the product ID to update: ");
+                if (scanner.hasNextInt()) {
+                    productID = scanner.nextInt();
+                    if (productID > 0) {
+                        break;
+                    }
+                }
+                else {
+                    // Clear invalid input
+                    scanner.next();
+                }
+                System.out.println("Invalid input: Product ID must be a positive integer.");
+            }
+
+            scanner.nextLine();
+
+            // Get Updated Product Name
+            while (true) {
+                System.out.println("Enter new product name: ");
+                name = scanner.nextLine().trim();
+                if (!name.isEmpty()) {
+                    break;
+                }
+                System.out.println("Invalid input: Product name cannot be empty.");
+            }
+
+            // Get Updated Product Price
+            while (true) {
+                System.out.println("Enter new product price: ");
+                if (scanner.hasNextDouble()) {
+                    price = scanner.nextDouble();
+                    if (price > 0) {
+                        break;
+                    }
+                }
+                else {
+                    // Clear invalid input
+                    scanner.next();
+                }
+                System.out.println("Invalid input: Must be a positive number.");
+            }
+
+            // Get Updated Product Quantity
+            while (true) {
+                System.out.println("Enter new product quantity: ");
+                if (scanner.hasNextInt()) {
+                    quantity = scanner.nextInt();
+                    if (quantity >= 0) {
+                        break;
+                    }
+                }
+                else {
+                    // Clear invalid input
+                    scanner.next();
+                }
+                System.out.println("Invalid input: Quantity cannot be negative.");
+            }
+
+            // Create Product with updated details
+            Product product = new Product(productID, name, price, quantity, sellerID);
+
+            // Update Product using productService
+            productService.updateProduct(product);
+
+            System.out.println("Product updated successfully!");
+
+        }
+        catch (Exception e) {
+            System.out.println("Error updating product: " + e.getMessage());
+        }
+    }
 
 
 }

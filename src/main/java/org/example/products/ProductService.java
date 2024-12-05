@@ -19,4 +19,5 @@ public class ProductService {
     public void addProduct(Products product) throws SQLException {
         productDAO.addProduct(product);
     }
+
 }

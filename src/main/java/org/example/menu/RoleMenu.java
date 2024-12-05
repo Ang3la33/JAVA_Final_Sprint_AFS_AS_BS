@@ -1,10 +1,11 @@
 package org.example.menu;
 
-import org.example.products.Product;
+import org.example.products.Products;
 import org.example.products.ProductService;
 import org.example.users.UserService;
 import org.example.users.Users;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 // Class to organize role-based functionality with menu options
@@ -14,7 +15,7 @@ public class RoleMenu {
     private UserService userService;
 
     // Constructor - initialize RoleMenu object with references to ProductService and UserService
-    public RoleMenu (ProductService productService, UserService userService) {
+    public RoleMenu(ProductService productService, UserService userService) {
         this.productService = productService;
         this.userService = userService;
     }
@@ -46,19 +47,33 @@ public class RoleMenu {
         System.out.println("4. Exit");
 
         int choice = scanner.nextInt();
+        scanner.nextLine(); // Clear input buffer
         switch (choice) {
             case 1: // Browse Products
-                productService.getAllProducts().forEach(System.out::println);
+                try {
+                    productService.getAllProducts().forEach(System.out::println);
+                } catch (SQLException e) {
+                    System.out.println("Error fetching products: " + e.getMessage());
+                }
                 break;
             case 2: // Search Products by name
                 System.out.println("Enter product name: ");
-                String name = scanner.next();
-                productService.searchProducts(name).forEach(System.out::println);
+                String name = scanner.nextLine();
+                try {
+                    productService.searchProducts(name).forEach(System.out::println);
+                } catch (SQLException e) {
+                    System.out.println("Error searching products: " + e.getMessage());
+                }
                 break;
             case 3: // View Product Details by ID
                 System.out.println("Enter product ID: ");
                 int id = scanner.nextInt();
-                System.out.println(productService.getProductById(id));
+                scanner.nextLine(); // Clear input buffer
+                try {
+                    System.out.println(productService.getProductById(id));
+                } catch (SQLException e) {
+                    System.out.println("Error fetching product details: " + e.getMessage());
+                }
                 break;
             case 4: // Exit Program
                 return;
@@ -80,6 +95,7 @@ public class RoleMenu {
         System.out.println("5. Exit");
 
         int choice = scanner.nextInt();
+        scanner.nextLine(); // Clear input buffer
         switch (choice) {
             case 1:
                 addProduct(sellerID);
@@ -101,9 +117,6 @@ public class RoleMenu {
         // Display seller menu again
         displaySellerMenu(sellerID);
     }
-
-    // Methods called in Seller Menu
-    // (addProduct, updateProduct, deleteProduct, viewSellerProducts)
 
     // Add Product Method
     private void addProduct(int sellerID) {
@@ -131,10 +144,8 @@ public class RoleMenu {
                     if (price > 0) {
                         break;
                     }
-                }
-                else {
-                    // Clear invalid input
-                    scanner.next();
+                } else {
+                    scanner.next(); // Clear invalid input
                 }
                 System.out.println("Invalid input: Price must be a positive number.");
             }
@@ -147,24 +158,18 @@ public class RoleMenu {
                     if (quantity >= 0) {
                         break;
                     }
-                }
-                else {
-                    // Clear invalid input
-                    scanner.next();
+                } else {
+                    scanner.next(); // Clear invalid input
                 }
                 System.out.println("Invalid input: Quantity cannot be negative.");
             }
 
             // Create Product
-            Product product = new Product(0, name, price, quantity, sellerID);
-
-            // Add Product using productService
+            Products product = new Products(0, name, price, quantity, sellerID);
             productService.addProduct(product);
-
             System.out.println("Product added successfully!");
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error adding product: " + e.getMessage());
         }
     }
@@ -178,7 +183,6 @@ public class RoleMenu {
         int quantity = 0;
 
         try {
-
             // Get Product ID to update
             while (true) {
                 System.out.println("Enter the product ID to update: ");
@@ -187,15 +191,12 @@ public class RoleMenu {
                     if (productID > 0) {
                         break;
                     }
-                }
-                else {
-                    // Clear invalid input
-                    scanner.next();
+                } else {
+                    scanner.next(); // Clear invalid input
                 }
                 System.out.println("Invalid input: Product ID must be a positive integer.");
             }
-
-            scanner.nextLine();
+            scanner.nextLine(); // Clear input buffer
 
             // Get Updated Product Name
             while (true) {
@@ -215,10 +216,8 @@ public class RoleMenu {
                     if (price > 0) {
                         break;
                     }
-                }
-                else {
-                    // Clear invalid input
-                    scanner.next();
+                } else {
+                    scanner.next(); // Clear invalid input
                 }
                 System.out.println("Invalid input: Must be a positive number.");
             }
@@ -231,29 +230,48 @@ public class RoleMenu {
                     if (quantity >= 0) {
                         break;
                     }
-                }
-                else {
-                    // Clear invalid input
-                    scanner.next();
+                } else {
+                    scanner.next(); // Clear invalid input
                 }
                 System.out.println("Invalid input: Quantity cannot be negative.");
             }
 
             // Create Product with updated details
-            Product product = new Product(productID, name, price, quantity, sellerID);
-
-            // Update Product using productService
+            Products product = new Products(productID, name, price, quantity, sellerID);
             productService.updateProduct(product);
-
             System.out.println("Product updated successfully!");
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error updating product: " + e.getMessage());
         }
     }
 
+    // Delete Product Method
+    private void deleteProduct(int sellerID) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the product ID to delete: ");
+        int productID = scanner.nextInt();
+        scanner.nextLine(); // Clear input buffer
 
+        try {
+            productService.deleteProduct(productID, sellerID);
+            System.out.println("Product deleted successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error deleting product: " + e.getMessage());
+        }
+    }
+
+    // View Seller Products
+    private void viewSellerProducts(int sellerID) {
+        try {
+            productService.getProductsBySeller(sellerID).forEach(System.out::println);
+        } catch (SQLException e) {
+            System.out.println("Error fetching seller's products: " + e.getMessage());
+        }
+    }
+
+    // Admin Menu Method (Placeholder for Now)
+    private void displayAdminMenu() {
+        System.out.println("Admin functionality is under development.");
+    }
 }
-
-

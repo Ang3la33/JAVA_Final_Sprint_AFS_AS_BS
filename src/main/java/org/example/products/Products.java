@@ -4,11 +4,11 @@ public class Products {
     private int prod_id;
     private String prod_name;
     private double prod_price;
-    private double prod_quantity;
-    private String seller_id;
+    private int prod_quantity;
+    private int seller_id;
 
     // Constructor for creating a product without an ID (e.g., before saving to the database)
-    public Products(String prod_name, double prod_price, double prod_quantity, String seller_id) {
+    public Products(String prod_name, double prod_price, int prod_quantity, int seller_id) {
         this.prod_name = prod_name;
         this.prod_price = prod_price;
         this.prod_quantity = prod_quantity;
@@ -16,7 +16,7 @@ public class Products {
     }
 
     // Constructor for creating a product with an ID (e.g., after fetching from the database)
-    public Products(int prod_id, String prod_name, double prod_price, double prod_quantity, String seller_id) {
+    public Products(int prod_id, String prod_name, double prod_price, int prod_quantity, int seller_id) {
         this.prod_id = prod_id;
         this.prod_name = prod_name;
         this.prod_price = prod_price;
@@ -48,19 +48,19 @@ public class Products {
         this.prod_price = prod_price;
     }
 
-    public double getProd_quantity() {
+    public int getProd_quantity() {
         return prod_quantity;
     }
 
-    public void setProd_quantity(double prod_quantity) {
+    public void setProd_quantity(int prod_quantity) {
         this.prod_quantity = prod_quantity;
     }
 
-    public String getSeller_id() {
+    public int getSeller_id() {
         return seller_id;
     }
 
-    public void setSeller_id(String seller_id) {
+    public void setSeller_id(int seller_id) {
         this.seller_id = seller_id;
     }
 }

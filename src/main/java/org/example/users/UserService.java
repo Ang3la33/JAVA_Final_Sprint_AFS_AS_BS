@@ -1,13 +1,13 @@
 package org.example.users;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class UserService {
     private UserDAO userDAO;
 
     public UserService() {
-
-        userDAO = new UserDAO();
+        this.userDAO = new UserDAO();
     }
 
     public void getAllUsers() throws SQLException {

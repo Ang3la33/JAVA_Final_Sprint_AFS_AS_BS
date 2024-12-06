@@ -2,34 +2,46 @@ package org.example.users;
 
 import org.example.database.DatabaseConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
 
     // fetch all users
-    public void getAllUsers() throws SQLException {
+    public List<Users> getAllUsers() throws SQLException {
         String sql = "SELECT * FROM users";
+        List<Users> users = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
+                // Extract data from the ResultSet
                 int user_id = rs.getInt("user_id");
                 String user_username = rs.getString("user_username");
                 String user_email = rs.getString("user_email");
                 String user_role = rs.getString("user_role");
 
+                // Print users details
                 System.out.println("User ID: " + user_id);
                 System.out.println("Username: " + user_username);
                 System.out.println("Email: " + user_email);
                 System.out.println("Role: " + user_role);
                 System.out.println("------------------------");
+
+                // Add user to the list
+                users.add(new Users(
+                        user_id,
+                        user_username,
+                        null, // Do not show users password in list
+                        user_email,
+                        user_role
+                ));
             }
         }
+        return users;
     }
 
     // add a user

@@ -270,8 +270,49 @@ public class RoleMenu {
         }
     }
 
-    // Admin Menu Method (Placeholder for Now)
+    // Admin Menu Method
     private void displayAdminMenu() {
-        System.out.println("Admin functionality is under development.");
+       Scanner scanner = new Scanner(System.in);
+       System.out.println("Admin Menu: ");
+       System.out.println("1. View All Users");
+       System.out.println("2. Delete User");
+       System.out.println("3. View All Products");
+       System.out.println("4. Exit");
+
+       int choice = scanner.nextInt();
+       scanner.nextLine();
+       switch (choice) {
+           case 1:
+               viewAllUsers();
+               break;
+           case 2:
+               deleteUser();
+               break;
+           case 3:
+               viewAllProducts();
+               break;
+           case 4:
+               return;
+           default:
+               System.out.println("Invalid choice: Enter 1, 2, 3, or 4.");
+       }
+       // Display admin menu again
+        displayAdminMenu();
     }
+
+    // Methods inside of Admin Menu
+
+    // Method to view all users
+    private void viewAllUsers() {
+        try {
+            System.out.println("List of all users:");
+            userService.getAllUsers().forEach(System.out::println);
+        } catch (SQLException e) {
+            throw new RuntimeException("Database error occurred while fetching users", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error occurred while fetching users", e);
+        }
+    }
+
+
 }

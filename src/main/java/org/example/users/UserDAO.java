@@ -86,8 +86,11 @@ public class UserDAO {
 
 
     // Delete user by ID
+    public boolean deleteUser(int user_id) throws SQLException {
+        if (user_id <= 0) {
+            throw new IllegalArgumentException("User ID must be a positive integer.");
+        }
 
-    public void deleteUser(int user_id) throws SQLException {
         String sql = "DELETE FROM users WHERE user_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -98,15 +101,14 @@ public class UserDAO {
             int rowsDeleted = pstmt.executeUpdate();
             if (rowsDeleted > 0) {
                 System.out.println("User with ID " + user_id + " deleted successfully.");
+                return true; // User successfully deleted
             } else {
                 System.out.println("No user found with ID " + user_id + ".");
+                return false; // No user found to delete
             }
-        } catch (SQLException e) {
-            System.err.println("Error deleting user: " + e.getMessage());
-            throw e;  // I think this is how this works
-
         }
     }
+
     // get user by email
     public Users getUserByEmail(String email) throws SQLException {
         String sql = "SELECT * FROM users WHERE user_email = ?";

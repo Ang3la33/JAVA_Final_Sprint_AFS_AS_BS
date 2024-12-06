@@ -116,6 +116,32 @@ public class UserDAO {
     }
 
 
+    // get user by ID
+    public Users getUserById(int user_id) throws SQLException {
+        String sql = "SELECT * FROM users WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, user_id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new Users(
+                        rs.getInt("user_id"),
+                        rs.getString("user_username"),
+                        rs.getString("user_password"),
+                        rs.getString("user_email"),
+                        rs.getString("user_role")
+                );
+            }
+        }
+        return null;
+    }
+
+
+
+
 
 
 

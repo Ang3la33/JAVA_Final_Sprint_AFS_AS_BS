@@ -5,29 +5,34 @@ import org.example.products.ProductService;
 import org.example.users.UserService;
 import org.example.users.Users;
 
+import org.mindrot.jbcrypt.BCrypt; // Ensure BCrypt is available in your project
+
 import java.util.Scanner;
 
-public class EcomApp {
+public class EcomAppNew {
 
     public static void main(String[] args) {
 
+        // Initialize services
         ProductService productService = new ProductService();
         UserService userService = new UserService();
         RoleMenu roleMenu = new RoleMenu(productService, userService);
 
-        System.out.println("Welcome!");
+        System.out.println("Welcome to the E-Commerce Application!");
         Scanner scanner = new Scanner(System.in);
         Users loggedInUser = null;
 
+        // Login loop
         while (loggedInUser == null) {
             System.out.println("Please log in:");
             System.out.print("Enter your email: ");
-            String email = scanner.nextLine();
+            String email = scanner.nextLine().trim();
             System.out.print("Enter your password: ");
-            String password = scanner.nextLine();
+            String password = scanner.nextLine().trim();
 
             try {
-                Users user = userService.getUserDAO().getUserByEmail(email);
+                // Attempt to retrieve the user by email
+                Users user = userService.getUserByEmail(email);
                 if (user != null && BCrypt.checkpw(password, user.getUser_password())) {
                     loggedInUser = user;
                     System.out.println("Logged in! Welcome, " + user.getUser_username() + " (" + user.getUser_role() + ")");
@@ -39,8 +44,7 @@ public class EcomApp {
             }
         }
 
-
-
+        // Display menu for the logged-in user
         roleMenu.displayMenu(loggedInUser);
     }
 }

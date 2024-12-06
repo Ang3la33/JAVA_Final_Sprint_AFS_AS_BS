@@ -8,7 +8,7 @@ import java.util.List;
 
 public class UserDAO {
 
-    // fetch all users
+    // Fetch all users
     public List<Users> getAllUsers() throws SQLException {
         String sql = "SELECT * FROM users";
         List<Users> users = new ArrayList<>();
@@ -24,7 +24,7 @@ public class UserDAO {
                 String user_email = rs.getString("user_email");
                 String user_role = rs.getString("user_role");
 
-                // Print users details
+                // Print user details
                 System.out.println("User ID: " + user_id);
                 System.out.println("Username: " + user_username);
                 System.out.println("Email: " + user_email);
@@ -32,20 +32,18 @@ public class UserDAO {
                 System.out.println("------------------------");
 
                 // Add user to the list
-                users.add(new Users(
-                        user_id,
-                        user_username,
-                        null, // Do not show users password in list
-                        user_email,
-                        user_role
-                ));
+                users.add(new Users(user_id, user_username, null, user_email, user_role)); // Password excluded for security
             }
         }
         return users;
     }
 
-    // add a user
+    // Add a new user
     public void addUser(Users user) throws SQLException {
+        if (isEmailTaken(user.getUser_email())) {
+            throw new IllegalArgumentException("Email is already in use.");
+        }
+
         String sql = "INSERT INTO users (user_username, user_password, user_email, user_role) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -60,20 +58,32 @@ public class UserDAO {
         }
     }
 
-    // Update an existing user
+    // Check if email is already in use
+    public boolean isEmailTaken(String email) throws SQLException {
+        String sql = "SELECT 1 FROM users WHERE user_email = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        }
+    }
+
+    // Update an existing user's role
     public void updateUser(Users user) throws SQLException {
         if (user.getUser_email() == null || user.getUser_email().isEmpty()) {
-            throw new IllegalArgumentException("User email cannot be null or empty.")
+            throw new IllegalArgumentException("User email cannot be null or empty.");
         }
+
         String sql = "UPDATE users SET user_role = ? WHERE user_email = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-
             pstmt.setString(1, user.getUser_role());
             pstmt.setString(2, user.getUser_email());
-
 
             int rowsUpdated = pstmt.executeUpdate();
             if (rowsUpdated > 0) {
@@ -84,8 +94,7 @@ public class UserDAO {
         }
     }
 
-
-    // Delete user by ID
+    // Delete a user by ID
     public boolean deleteUser(int user_id) throws SQLException {
         if (user_id <= 0) {
             throw new IllegalArgumentException("User ID must be a positive integer.");
@@ -101,15 +110,15 @@ public class UserDAO {
             int rowsDeleted = pstmt.executeUpdate();
             if (rowsDeleted > 0) {
                 System.out.println("User with ID " + user_id + " deleted successfully.");
-                return true; // User successfully deleted
+                return true;
             } else {
                 System.out.println("No user found with ID " + user_id + ".");
-                return false; // No user found to delete
+                return false;
             }
         }
     }
 
-    // get user by email
+    // Get user by email
     public Users getUserByEmail(String email) throws SQLException {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("Email cannot be null or empty.");
@@ -137,8 +146,7 @@ public class UserDAO {
         return null;
     }
 
-
-    // get user by ID
+    // Get user by ID
     public Users getUserById(int user_id) throws SQLException {
         String sql = "SELECT * FROM users WHERE user_id = ?";
 
@@ -160,13 +168,4 @@ public class UserDAO {
         }
         return null;
     }
-
-
-
-
-
-
-
-
-
 }

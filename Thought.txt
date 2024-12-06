@@ -1,4 +1,4 @@
 User
  - Buyer
  - Seller
- - Admin
+ - Admin (admin@example.com - admin123)

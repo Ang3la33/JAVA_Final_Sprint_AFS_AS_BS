@@ -4,11 +4,11 @@ import org.example.products.Products;
 import org.example.products.ProductService;
 import org.example.users.UserService;
 import org.example.users.Users;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
-// Class to organize role-based functionality with menu options
 public class RoleMenu {
 
     private ProductService productService;
@@ -37,88 +37,205 @@ public class RoleMenu {
         }
     }
 
+    // Method to ask for login or registration
+    public void loginOrRegister() {
+        Scanner scanner = new Scanner(System.in);
+        Users loggedInUser = null;
+
+        // Menu to choose login or registration
+        while (loggedInUser == null) {
+            System.out.println("Please choose an option:");
+            System.out.println("1. Register");
+            System.out.println("2. Login");
+            System.out.println("3. Exit");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Clear input buffer
+
+            switch (choice) {
+                case 1:
+                    registerUser(scanner);
+                    break;
+                case 2:
+                    loggedInUser = loginUser(scanner);
+                    if (loggedInUser != null) {
+                        System.out.println("Logged in successfully!");
+                    }
+                    break;
+                case 3:
+                    System.out.println("Goodbye!");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please select 1, 2, or 3.");
+            }
+        }
+
+        // Once logged in, display the role-based menu
+        displayMenu(loggedInUser);
+    }
+
+    // Register a new user
+    private void registerUser(Scanner scanner) {
+        System.out.println("Register a new user:");
+
+        // Check if there are any existing users. The first user will be set as Admin.
+        String role = "BUYER";  // Default role
+        try {
+            if (userService.getAllUsers().isEmpty()) {
+                role = "ADMIN"; // First user will be an Admin
+                System.out.println("First user will be set as Admin.");
+            } else {
+                // If there are already users, only allow "BUYER" or "SELLER"
+                System.out.print("Enter role (BUYER/SELLER): ");
+                role = scanner.nextLine().toUpperCase();
+                while (!role.equals("BUYER") && !role.equals("SELLER")) {
+                    System.out.println("Invalid role. Please choose either 'BUYER' or 'SELLER'.");
+                    System.out.print("Enter role (BUYER/SELLER): ");
+                    role = scanner.nextLine().toUpperCase();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking existing users: " + e.getMessage());
+            return;
+        }
+
+        System.out.print("Enter username: ");
+        String username = scanner.nextLine();
+
+        System.out.print("Enter email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("Enter password: ");
+        String password = scanner.nextLine();
+
+        // Hash the password before saving
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+        Users newUser = new Users(username, hashedPassword, email, role);
+
+        try {
+            userService.addUser(newUser);
+            System.out.println("User registered successfully!");
+        } catch (SQLException e) {
+            System.out.println("Error registering user: " + e.getMessage());
+        }
+    }
+
+    // Login a user
+    private Users loginUser(Scanner scanner) {
+        System.out.println("Please log in:");
+
+        System.out.print("Enter your email: ");
+        String email = scanner.nextLine();
+
+        System.out.print("Enter your password: ");
+        String password = scanner.nextLine();
+
+        try {
+            Users user = userService.getUserByEmail(email);
+            if (user != null && BCrypt.checkpw(password, user.getUser_password())) {
+                return user; // Successful login
+            } else {
+                System.out.println("Invalid email or password. Please try again.");
+                return null; // Failed login
+            }
+        } catch (SQLException e) {
+            System.out.println("Error during login: " + e.getMessage());
+            return null; // Error occurred
+        }
+    }
+
     // Buyer Menu Method
     private void displayBuyerMenu() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Buyer Menu:");
-        System.out.println("1. Browse Products");
-        System.out.println("2. Search Products");
-        System.out.println("3. View Product Details");
-        System.out.println("4. Exit");
+        boolean running = true;
 
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Clear input buffer
-        switch (choice) {
-            case 1: // Browse Products
-                try {
-                    productService.getAllProducts().forEach(System.out::println);
-                } catch (SQLException e) {
-                    System.out.println("Error fetching products: " + e.getMessage());
-                }
-                break;
-            case 2: // Search Products by name
-                System.out.println("Enter product name: ");
-                String name = scanner.nextLine();
-                try {
-                    productService.searchProducts(name).forEach(System.out::println);
-                } catch (SQLException e) {
-                    System.out.println("Error searching products: " + e.getMessage());
-                }
-                break;
-            case 3: // View Product Details by ID
-                System.out.println("Enter product ID: ");
-                int id = scanner.nextInt();
-                scanner.nextLine(); // Clear input buffer
-                try {
-                    System.out.println(productService.getProductById(id));
-                } catch (SQLException e) {
-                    System.out.println("Error fetching product details: " + e.getMessage());
-                }
-                break;
-            case 4: // Exit Program
-                return;
-            default:
-                System.out.println("Invalid choice: Enter 1, 2, 3, or 4");
+        while (running) {
+            System.out.println("Buyer Menu:");
+            System.out.println("1. Browse Products");
+            System.out.println("2. Search Products");
+            System.out.println("3. View Product Details");
+            System.out.println("4. Exit");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Clear input buffer
+
+            switch (choice) {
+                case 1:
+                    try {
+                        productService.getAllProducts().forEach(System.out::println);
+                    } catch (SQLException e) {
+                        System.out.println("Error fetching products: " + e.getMessage());
+                    }
+                    break;
+                case 2:
+                    System.out.println("Enter product name: ");
+                    String name = scanner.nextLine();
+                    try {
+                        productService.searchProducts(name).forEach(System.out::println);
+                    } catch (SQLException e) {
+                        System.out.println("Error searching products: " + e.getMessage());
+                    }
+                    break;
+                case 3:
+                    System.out.println("Enter product ID: ");
+                    int id = scanner.nextInt();
+                    scanner.nextLine(); // Clear input buffer
+                    try {
+                        System.out.println(productService.getProductById(id));
+                    } catch (SQLException e) {
+                        System.out.println("Error fetching product details: " + e.getMessage());
+                    }
+                    break;
+                case 4:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice: Enter 1, 2, 3, or 4");
+            }
         }
-        // Display menu again so that user can perform multiple actions without restarting program
-        displayBuyerMenu();
     }
 
     // Seller Menu Method
     private void displaySellerMenu(int sellerID) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Seller Menu:");
-        System.out.println("1. Add Product");
-        System.out.println("2. Update Product");
-        System.out.println("3. Delete Product");
-        System.out.println("4. View My Products");
-        System.out.println("5. Exit");
+        boolean running = true;
 
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // Clear input buffer
-        switch (choice) {
-            case 1:
-                addProduct(sellerID);
-                break;
-            case 2:
-                updateProduct(sellerID);
-                break;
-            case 3:
-                deleteProduct(sellerID);
-                break;
-            case 4:
-                viewSellerProducts(sellerID);
-                break;
-            case 5:
-                return;
-            default:
-                System.out.println("Invalid choice: Enter 1, 2, 3, 4, or 5.");
+        while (running) {
+            System.out.println("Seller Menu:");
+            System.out.println("1. Add Product");
+            System.out.println("2. Update Product");
+            System.out.println("3. Delete Product");
+            System.out.println("4. View My Products");
+            System.out.println("5. Exit");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Clear input buffer
+
+            switch (choice) {
+                case 1:
+                    addProduct(sellerID);
+                    break;
+                case 2:
+                    updateProduct(sellerID);
+                    break;
+                case 3:
+                    deleteProduct(sellerID);
+                    break;
+                case 4:
+                    viewSellerProducts(sellerID);
+                    break;
+                case 5:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice: Enter 1, 2, 3, 4, or 5.");
+            }
         }
-        // Display seller menu again
-        displaySellerMenu(sellerID);
     }
 
-    // Add Product Method
+    // Method to add a product (Seller Menu)
     private void addProduct(int sellerID) {
         Scanner scanner = new Scanner(System.in);
         String name = "";
@@ -272,86 +389,68 @@ public class RoleMenu {
 
     // Admin Menu Method
     private void displayAdminMenu() {
-       Scanner scanner = new Scanner(System.in);
-       System.out.println("Admin Menu: ");
-       System.out.println("1. View All Users");
-       System.out.println("2. Delete User");
-       System.out.println("3. View All Products");
-       System.out.println("4. Exit");
+        Scanner scanner = new Scanner(System.in);
+        boolean running = true;
 
-       int choice = scanner.nextInt();
-       scanner.nextLine();
-       switch (choice) {
-           case 1:
-               viewAllUsers();
-               break;
-           case 2:
-               deleteUser();
-               break;
-           case 3:
-               viewAllProducts();
-               break;
-           case 4:
-               return;
-           default:
-               System.out.println("Invalid choice: Enter 1, 2, 3, or 4.");
-       }
-       // Display admin menu again
-        displayAdminMenu();
+        while (running) {
+            System.out.println("Admin Menu:");
+            System.out.println("1. View All Users");
+            System.out.println("2. Delete User");
+            System.out.println("3. View All Products");
+            System.out.println("4. Exit");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Clear input buffer
+
+            switch (choice) {
+                case 1:
+                    viewAllUsers();
+                    break;
+                case 2:
+                    deleteUser();
+                    break;
+                case 3:
+                    viewAllProducts();
+                    break;
+                case 4:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please select 1, 2, 3, or 4.");
+            }
+        }
     }
 
-    // Methods inside of Admin Menu
-
-    // Method to view all users
+    // Method to view all users (Admin Menu)
     private void viewAllUsers() {
         try {
-            System.out.println("List of all users:");
             userService.getAllUsers().forEach(System.out::println);
         } catch (SQLException e) {
-            throw new RuntimeException("Database error occurred while fetching users", e);
-        } catch (Exception e) {
-            throw new RuntimeException("Unexpected error occurred while fetching users", e);
+            System.out.println("Error fetching users: " + e.getMessage());
         }
     }
 
-    // Method to delete users
+    // Method to delete users (Admin Menu)
     private void deleteUser() {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the user ID to delete: ");
+        int userID = scanner.nextInt();
+        scanner.nextLine(); // Clear input buffer
 
         try {
-            // Prompt for user ID to delete
-            System.out.println("Enter the ID of the user to delete: ");
-            int userID = 0;
-
-            // Validate input
-            while (true) {
-                if (scanner.hasNextInt()) {
-                    userID = scanner.nextInt();
-                    if (userID > 0) {
-                        break;
-                    }
-                } else {
-                    // Clear invalid input
-                    scanner.next();
-                }
-                System.out.println("Invalid input: User ID must be a positive integer.");
-            }
-
-            // Use userService to delete selected user
-            boolean isDeleted = userService.deleteUserById(userID);
-
-            // Check result
-            if (isDeleted) {
-                System.out.println("User with ID " + userID + "has been successfully deleted!");
-            } else {
-                System.out.println("User with ID " + userID + "not found.");
-            }
+            userService.deleteUserById(userID);
+            System.out.println("User deleted successfully!");
         } catch (SQLException e) {
-            System.out.println("Error: Unable to delete the user." + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Error: An unexpected issue occurred while deleting the user." + e.getMessage());
+            System.out.println("Error deleting user: " + e.getMessage());
         }
     }
 
-
+    // Method to view all products (Admin Menu)
+    private void viewAllProducts() {
+        try {
+            productService.getAllProducts().forEach(System.out::println);
+        } catch (SQLException e) {
+            System.out.println("Error fetching products: " + e.getMessage());
+        }
+    }
 }

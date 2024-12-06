@@ -62,6 +62,9 @@ public class UserDAO {
 
     // Update an existing user
     public void updateUser(Users user) throws SQLException {
+        if (user.getUser_email() == null || user.getUser_email().isEmpty()) {
+            throw new IllegalArgumentException("User email cannot be null or empty.")
+        }
         String sql = "UPDATE users SET user_role = ? WHERE user_email = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();

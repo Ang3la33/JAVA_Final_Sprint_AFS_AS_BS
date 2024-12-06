@@ -111,6 +111,10 @@ public class UserDAO {
 
     // get user by email
     public Users getUserByEmail(String email) throws SQLException {
+        if (email == null || email.isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty.");
+        }
+
         String sql = "SELECT * FROM users WHERE user_email = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -129,6 +133,7 @@ public class UserDAO {
                 );
             }
         }
+        System.out.println("No user found with email: " + email);
         return null;
     }
 

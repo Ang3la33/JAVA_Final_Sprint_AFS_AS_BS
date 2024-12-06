@@ -10,48 +10,37 @@ import java.util.Scanner;
 public class EcomApp {
 
     public static void main(String[] args) {
-        // Initialize services
+
         ProductService productService = new ProductService();
         UserService userService = new UserService();
         RoleMenu roleMenu = new RoleMenu(productService, userService);
 
-        // Simulated login process
-        System.out.println("Welcome to the E-commerce Application!");
+        System.out.println("Welcome!");
         Scanner scanner = new Scanner(System.in);
         Users loggedInUser = null;
 
-        // Example test user selection
         while (loggedInUser == null) {
-            System.out.println("Please log in by selecting a role:");
-            System.out.println("1. Buyer");
-            System.out.println("2. Seller");
-            System.out.println("3. Admin");
-            System.out.println("4. Exit");
+            System.out.println("Please log in:");
+            System.out.print("Enter your email: ");
+            String email = scanner.nextLine();
+            System.out.print("Enter your password: ");
+            String password = scanner.nextLine();
 
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Clear input buffer
-            switch (choice) {
-                case 1:
-                    // Simulate Buyer Login
-                    loggedInUser = new Users(1, "test_buyer", "password", "buyer@test.com", "BUYER");
-                    break;
-                case 2:
-                    // Simulate Seller Login
-                    loggedInUser = new Users(2, "test_seller", "password", "seller@test.com", "SELLER");
-                    break;
-                case 3:
-                    // Simulate Admin Login
-                    loggedInUser = new Users(3, "test_admin", "password", "admin@test.com", "ADMIN");
-                    break;
-                case 4:
-                    System.out.println("Exiting application. Goodbye!");
-                    System.exit(0);
-                default:
-                    System.out.println("Invalid choice. Please select 1, 2, 3, or 4.");
+            try {
+                Users user = userService.getUserDAO().getUserByEmail(email);
+                if (user != null && BCrypt.checkpw(password, user.getUser_password())) {
+                    loggedInUser = user;
+                    System.out.println("Logged in! Welcome, " + user.getUser_username() + " (" + user.getUser_role() + ")");
+                } else {
+                    System.out.println("Invalid email or password. Please try again.");
+                }
+            } catch (Exception e) {
+                System.out.println("Error during login: " + e.getMessage());
             }
         }
 
-        // Display the menu for the logged-in user
+
+
         roleMenu.displayMenu(loggedInUser);
     }
 }

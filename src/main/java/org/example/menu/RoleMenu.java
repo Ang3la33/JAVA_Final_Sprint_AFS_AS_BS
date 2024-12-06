@@ -314,5 +314,44 @@ public class RoleMenu {
         }
     }
 
+    // Method to delete users
+    private void deleteUser() {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            // Prompt for user ID to delete
+            System.out.println("Enter the ID of the user to delete: ");
+            int userID = 0;
+
+            // Validate input
+            while (true) {
+                if (scanner.hasNextInt()) {
+                    userID = scanner.nextInt();
+                    if (userID > 0) {
+                        break;
+                    }
+                } else {
+                    // Clear invalid input
+                    scanner.next();
+                }
+                System.out.println("Invalid input: User ID must be a positive integer.");
+            }
+
+            // Use userService to delete selected user
+            boolean isDeleted = userService.deleteUserById(userID);
+
+            // Check result
+            if (isDeleted) {
+                System.out.println("User with ID " + userID + "has been successfully deleted!");
+            } else {
+                System.out.println("User with ID " + userID + "not found.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: Unable to delete the user." + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error: An unexpected issue occurred while deleting the user." + e.getMessage());
+        }
+    }
+
 
 }

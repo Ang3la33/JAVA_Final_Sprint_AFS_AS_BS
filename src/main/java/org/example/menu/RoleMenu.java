@@ -20,27 +20,28 @@ public class RoleMenu {
         this.userService = userService;
     }
 
-    // Method to display User Menu based on role
-    public void displayMenu(Users user) {
-        if (user == null) {
-            System.out.println("Error: No user logged in.");
-            loginOrRegister();
-            return;
-        }
-        switch (user.getUser_role().toUpperCase()) {
-            case "BUYER":
-                displayBuyerMenu();
-                break;
-            case "SELLER":
-                displaySellerMenu(user.getUser_id());
-                break;
-            case "ADMIN":
-                displayAdminMenu();
-                break;
-            default:
-                System.out.println("Invalid role. Redirecting to login.");
-        }       loginOrRegister();
+    // Display the role-based menu
+public void displayMenu(Users user) {
+    if (user == null) {
+        System.out.println("Error: No user logged in.");
+        loginOrRegister();
+        return;
     }
+    switch (user.getUser_role().toUpperCase()) {
+        case "BUYER":
+            displayBuyerMenu();
+            break;
+        case "SELLER":
+            displaySellerMenu(user.getUser_id());
+            break;
+        case "ADMIN":
+            displayAdminMenu(user); // Pass the logged-in Admin user
+            break;
+        default:
+            System.out.println("Invalid role. Redirecting to login.");
+    }
+    loginOrRegister();
+}
 
     // Method to ask for login or registration
     public void loginOrRegister() {
@@ -397,40 +398,40 @@ public class RoleMenu {
     }
 
     // Admin Menu Method
-    private void displayAdminMenu() {
-        Scanner scanner = new Scanner(System.in);
-        boolean running = true;
+private void displayAdminMenu(Users loggedInAdmin) { // Accept the logged-in Admin user
+    Scanner scanner = new Scanner(System.in);
+    boolean running = true;
 
-        while (running) {
-            System.out.println("Admin Menu:");
-            System.out.println("1. View All Users");
-            System.out.println("2. Delete User");
-            System.out.println("3. View All Products");
-            System.out.println("4. Exit");
+    while (running) {
+        System.out.println("Admin Menu:");
+        System.out.println("1. View All Users");
+        System.out.println("2. Delete User");
+        System.out.println("3. View All Products");
+        System.out.println("4. Exit");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Clear input buffer
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Clear input buffer
 
-            switch (choice) {
-                case 1:
-                    viewAllUsers();
-                    break;
-                case 2:
-                    deleteUser();
-                    break;
-                case 3:
-                    viewAllProducts();
-                    break;
-                case 4:
-                    System.out.println("Exiting Admin Menu...");
-                    running = false;
-                    loginOrRegister(); // Redirect to login or register menu
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please select 1, 2, 3, or 4.");
-            }
+        switch (choice) {
+            case 1:
+                viewAllUsers();
+                break;
+            case 2:
+                deleteUser(loggedInAdmin); // Pass the logged-in Admin user
+                break;
+            case 3:
+                viewAllProducts();
+                break;
+            case 4:
+                System.out.println("Exiting Admin Menu...");
+                running = false;
+                loginOrRegister(); // Redirect to login or register menu
+                return;
+            default:
+                System.out.println("Invalid choice. Please select 1, 2, 3, or 4.");
         }
     }
+}
 
     // Method to view all users (Admin Menu)
     private void viewAllUsers() {
@@ -448,31 +449,30 @@ public class RoleMenu {
         }
     }
 
-    // Method to delete users (Admin Menu)
     private void deleteUser(Users loggedInAdmin) {
         Scanner scanner = new Scanner(System.in);
-
+    
         System.out.println("Enter the user ID to delete:");
         int userID = scanner.nextInt();
         scanner.nextLine();
-
+    
         // Prevent admin from deleting their own account
         if (loggedInAdmin.getUser_id() == userID) {
             System.out.println("Error: You cannot delete your own account!");
             return;
         }
-
+    
         try {
             boolean isDeleted = userService.deleteUserById(userID);
             if (isDeleted) {
                 System.out.println("User deleted successfully!");
-            }
-            else {
-                System.out.println("User with ID " + userID + "not found.");
+            } else {
+                System.out.println("User with ID " + userID + " not found.");
             }
         } catch (SQLException e) {
             System.out.println("Error deleting user: " + e.getMessage());
         }
+    }    
 
     // Method to view all products (Admin Menu)
     private void viewAllProducts() {

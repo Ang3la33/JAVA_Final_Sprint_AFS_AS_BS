@@ -449,19 +449,30 @@ public class RoleMenu {
     }
 
     // Method to delete users (Admin Menu)
-    private void deleteUser() {
+    private void deleteUser(Users loggedInAdmin) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the user ID to delete: ");
+
+        System.out.println("Enter the user ID to delete:");
         int userID = scanner.nextInt();
-        scanner.nextLine(); // Clear input buffer
+        scanner.nextLine();
+
+        // Prevent admin from deleting their own account
+        if (loggedInAdmin.getUser_id() == userID) {
+            System.out.println("Error: You cannot delete your own account!");
+            return;
+        }
 
         try {
-            userService.deleteUserById(userID);
-            System.out.println("User deleted successfully!");
+            boolean isDeleted = userService.deleteUserById(userID);
+            if (isDeleted) {
+                System.out.println("User deleted successfully!");
+            }
+            else {
+                System.out.println("User with ID " + userID + "not found.");
+            }
         } catch (SQLException e) {
             System.out.println("Error deleting user: " + e.getMessage());
         }
-    }
 
     // Method to view all products (Admin Menu)
     private void viewAllProducts() {

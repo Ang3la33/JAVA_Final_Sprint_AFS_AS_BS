@@ -63,4 +63,13 @@ public class Products {
     public void setSeller_id(int seller_id) {
         this.seller_id = seller_id;
     }
+
+    public String toString() {
+        return "Product ID: " + prod_id +
+                ", Name: " + prod_name +
+                ", Price: $" + prod_price +
+                ", Quantity: " + prod_quantity +
+                ", Seller ID: " + seller_id;
+    }
 }
+

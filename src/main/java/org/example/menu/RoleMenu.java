@@ -22,6 +22,11 @@ public class RoleMenu {
 
     // Method to display User Menu based on role
     public void displayMenu(Users user) {
+        if (user == null) {
+            System.out.println("Error: No user logged in.");
+            loginOrRegister();
+            return;
+        }
         switch (user.getUser_role().toUpperCase()) {
             case "BUYER":
                 displayBuyerMenu();
@@ -33,8 +38,8 @@ public class RoleMenu {
                 displayAdminMenu();
                 break;
             default:
-                System.out.println("Invalid role.");
-        }
+                System.out.println("Invalid role. Redirecting to login.");
+        }       loginOrRegister();
     }
 
     // Method to ask for login or registration
@@ -189,8 +194,10 @@ public class RoleMenu {
                     }
                     break;
                 case 4:
+                    System.out.println("Exiting Buyer Menu...");
                     running = false;
-                    break;
+                    loginOrRegister(); // Redirect to login or register menu
+                    return;
                 default:
                     System.out.println("Invalid choice: Enter 1, 2, 3, or 4");
             }
@@ -227,8 +234,10 @@ public class RoleMenu {
                     viewSellerProducts(sellerID);
                     break;
                 case 5:
+                    System.out.println("Exiting Seller Menu...");
                     running = false;
-                    break;
+                    loginOrRegister(); // Redirect to login or register menu
+                    return;
                 default:
                     System.out.println("Invalid choice: Enter 1, 2, 3, 4, or 5.");
             }
@@ -413,8 +422,10 @@ public class RoleMenu {
                     viewAllProducts();
                     break;
                 case 4:
+                    System.out.println("Exiting Admin Menu...");
                     running = false;
-                    break;
+                    loginOrRegister(); // Redirect to login or register menu
+                    return;
                 default:
                     System.out.println("Invalid choice. Please select 1, 2, 3, or 4.");
             }

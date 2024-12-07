@@ -435,7 +435,14 @@ public class RoleMenu {
     // Method to view all users (Admin Menu)
     private void viewAllUsers() {
         try {
-            userService.getAllUsers().forEach(System.out::println);
+            System.out.println("List of all users:");
+            System.out.println("------------------");
+            userService.getAllUsers().forEach(user -> {
+               System.out.println("Name: " + user.getUser_username());
+               System.out.println("ID: " + user.getUser_id());
+               System.out.println("Role: " + user.getUser_role());
+               System.out.println("Contact: " + user.getUser_email());
+            });
         } catch (SQLException e) {
             System.out.println("Error fetching users: " + e.getMessage());
         }

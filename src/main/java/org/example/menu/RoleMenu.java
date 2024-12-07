@@ -466,7 +466,16 @@ public class RoleMenu {
     // Method to view all products (Admin Menu)
     private void viewAllProducts() {
         try {
-            productService.getAllProducts().forEach(System.out::println);
+            System.out.println("List of all products:");
+            System.out.println("----------------------");
+            productService.getAllProducts().forEach(product -> {
+                System.out.println("Product ID: " + product.getProd_id());
+                System.out.println("Name: " + product.getProd_name());
+                System.out.println("Price: $" + product.getProd_price());
+                System.out.println("Quantity: " + product.getProd_quantity());
+                System.out.println("Seller ID: " + product.getSeller_id());
+                System.out.println("---------------------");
+            });
         } catch (SQLException e) {
             System.out.println("Error fetching products: " + e.getMessage());
         }

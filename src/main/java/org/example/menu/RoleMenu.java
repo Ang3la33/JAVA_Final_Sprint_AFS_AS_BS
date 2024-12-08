@@ -390,7 +390,15 @@ public class RoleMenu {
     // View Seller Products
     private void viewSellerProducts(int sellerID) {
         try {
-            productService.getProductsBySeller(sellerID).forEach(System.out::println);
+            System.out.println("List of Products:");
+            System.out.println("------------------");
+            productService.getProductsBySeller(sellerID).forEach(product -> {
+                System.out.println("Product ID: " + product.getProd_id());
+                System.out.println("Product Name: " + product.getProd_name());
+                System.out.println("Price: $" + product.getProd_price());
+                System.out.println("Quantity: " + product.getProd_quantity());
+                System.out.println("--------------------------");
+            });
         } catch (SQLException e) {
             System.out.println("Error fetching seller's products: " + e.getMessage());
         }

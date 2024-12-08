@@ -481,12 +481,22 @@ public class RoleMenu {
                 System.out.println("List of all products:");
                 System.out.println("----------------------");
                 productService.getAllProducts().forEach(product -> {
-                    System.out.println("Product ID: " + product.getProd_id());
-                    System.out.println("Name: " + product.getProd_name());
-                    System.out.println("Price: $" + product.getProd_price());
-                    System.out.println("Quantity: " + product.getProd_quantity());
-                    System.out.println("Seller ID: " + product.getSeller_id());
-                    System.out.println("---------------------");
+                    try {
+                        // Retrieve seller name using seller ID
+                        Users seller = userService.getUserById(product.getSeller_id());
+                        String sellerName = (seller != null) ? seller.getUser_username() : "Unkown Seller";
+
+                        // Display product details
+                        System.out.println("Product ID: " + product.getProd_id());
+                        System.out.println("Name: " + product.getProd_name());
+                        System.out.println("Price: $" + product.getProd_price());
+                        System.out.println("Quantity: " + product.getProd_quantity());
+                        System.out.println("Seller Name: " + sellerName);
+                        System.out.println("---------------------");
+                    }
+                    catch (SQLException e) {
+                        System.out.println("Error fetching seller details for Product ID " + product.getProd_id() + ":" + e.getMessage());
+                    }
                 });
             } catch (SQLException e) {
                 System.out.println("Error fetching products: " + e.getMessage());

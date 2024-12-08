@@ -442,6 +442,7 @@ public class RoleMenu {
                 System.out.println("ID: " + user.getUser_id());
                 System.out.println("Role: " + user.getUser_role());
                 System.out.println("Contact: " + user.getUser_email());
+                System.out.println("--------------------------");
             });
         } catch (SQLException e) {
             System.out.println("Error fetching users: " + e.getMessage());

@@ -106,4 +106,90 @@ Keyin College's Semester 3 Java final project.
 <a id="usage-guide"></a>
 
 ### Getting Started
-1. **Install dependencies** using Maven:
+1. **Clone the Project**: Download or clone the project repository from your version control platform.
+2. **Set Up the Database**: Ensure your PostgreSQL database is configured. Use the provided SQL scripts to set up the required tables (`users` and `products`).
+3. **Install Dependencies**: Use Maven to install the required dependencies by running:
+   ```bash
+   mvn clean install
+
+
+---
+
+---
+
+### Application Workflow
+<a id="application-workflow"></a>
+
+#### Login or Register
+- **Login**:
+  - Enter your registered email and password to access the application.
+  - Role-specific menus will be displayed based on your user type.
+- **Register**:
+  - Enter your details, including username, email, and password.
+  - The system will automatically assign roles:
+    - The first registered user is designated as an **Admin**.
+    - Subsequent users can choose between the roles **Buyer** or **Seller**.
+
+---
+
+### Role-Specific Menus
+<a id="role-specific-menus"></a>
+
+#### Buyer Menu
+**Buyers** have the following options:
+- **Browse Products**: Displays a list of all available products, showing:
+  - Product name.
+  - Price.
+  - Quantity.
+  - Product ID.
+- **Search Products**: Enter a keyword to search for specific products by name.
+- **View Product Details**: Provide a product ID to view its details, including:
+  - Product name.
+  - Price.
+  - Quantity.
+  - Product ID.
+- **Exit**: Logs out and redirects to the login or registration menu.
+
+
+---
+
+#### Seller Menu
+**Sellers** have the following options:
+- **Add Product**: Create a new product by providing:
+  - Product name.
+  - Price.
+  - Quantity.
+- **Update Product**: Modify details of existing products in your inventory, including:
+  - Product name.
+  - Price.
+  - Quantity.
+- **Delete Product**: Remove a product from your inventory using its unique product ID.
+- **View My Products**: Lists all products you have created, showing:
+  - Product name.
+  - Price.
+  - Quantity.
+  - Product ID.
+- **Exit**: Logs out and redirects to the login or registration menu.
+
+
+---
+
+#### Admin Menu
+**Admins** have the following options:
+- **View All Products**:
+  - Lists all products on the platform, including:
+    - Product name.
+    - Price.
+    - Quantity.
+    - Product ID.
+- **View All Users**:
+  - Displays all registered users, including their:
+    - Username.
+    - Email.
+    - Role (Admin, Buyer, or Seller).
+- **Delete User**:
+  - Remove a user from the system using their unique user ID.
+  - Admins cannot delete their own account.
+- **Exit**: Logs out and redirects to the login or registration menu.
+
+

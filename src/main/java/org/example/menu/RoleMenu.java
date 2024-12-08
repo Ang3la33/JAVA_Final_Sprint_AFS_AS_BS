@@ -260,7 +260,15 @@ public class RoleMenu {
     // View Seller Products
     private void viewSellerProducts(int sellerID) {
         try {
-            productService.getProductsBySeller(sellerID).forEach(System.out::println);
+            System.out.println("List of Products:");
+            System.out.println("------------------");
+            productService.getProductsBySeller(sellerID).forEach(product -> {
+                System.out.println("Product ID: " + product.getProd_id());
+                System.out.println("Product Name: " + product.getProd_name());
+                System.out.println("Price: $" + product.getProd_price());
+                System.out.println("Quantity: " + product.getProd_quantity());
+                System.out.println("--------------------------");
+            });
         } catch (SQLException e) {
             System.out.println("Error fetching seller's products: " + e.getMessage());
         }
@@ -311,14 +319,15 @@ public class RoleMenu {
         }
     }
 
-    // Delete User (Admin Menu)
+    // Method to delete User (Admin Menu)
     private void deleteUser(Users loggedInAdmin) {
+
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter the user ID to delete: ");
         int userID = scanner.nextInt();
 
         if (userID == loggedInAdmin.getUser_id()) {
-            System.out.println("Error: You cannot delete your own account!");
+            System.out.println("Error: Admin cannot delete own account!");
             return;
         }
 
@@ -326,27 +335,39 @@ public class RoleMenu {
             if (userService.deleteUserById(userID)) {
                 System.out.println("User deleted successfully!");
             } else {
-                System.out.println("User not found.");
+
+                System.out.println("User with ID " + userID + "not found.");
             }
         } catch (SQLException e) {
             System.out.println("Error deleting user: " + e.getMessage());
         }
     }
 
-    // View All Products (Admin Menu)
-    private void viewAllProducts() {
-        try {
-            System.out.println("List of all products:");
-            productService.getAllProducts().forEach(product -> {
-                System.out.println("Product ID: " + product.getProd_id());
-                System.out.println("Name: " + product.getProd_name());
-                System.out.println("Price: $" + product.getProd_price());
-                System.out.println("Quantity: " + product.getProd_quantity());
-                System.out.println("Seller ID: " + product.getSeller_id());
-                System.out.println("--------------------");
-            });
-        } catch (SQLException e) {
-            System.out.println("Error fetching products: " + e.getMessage());
+        // Method to view all products (Admin Menu)
+        private void viewAllProducts () {
+            try {
+                System.out.println("List of all products:");
+                System.out.println("----------------------");
+                productService.getAllProducts().forEach(product -> {
+                    try {
+                        // Retrieve seller name using seller ID
+                        Users seller = userService.getUserById(product.getSeller_id());
+                        String sellerName = (seller != null) ? seller.getUser_username() : "Unkown Seller";
+
+                        // Display product details
+                        System.out.println("Product ID: " + product.getProd_id());
+                        System.out.println("Name: " + product.getProd_name());
+                        System.out.println("Price: $" + product.getProd_price());
+                        System.out.println("Quantity: " + product.getProd_quantity());
+                        System.out.println("Seller Name: " + sellerName);
+                        System.out.println("---------------------");
+                    }
+                    catch (SQLException e) {
+                        System.out.println("Error fetching seller details for Product ID " + product.getProd_id() + ":" + e.getMessage());
+                    }
+                });
+            } catch (SQLException e) {
+                System.out.println("Error fetching products: " + e.getMessage());
+            }
         }
     }
-}

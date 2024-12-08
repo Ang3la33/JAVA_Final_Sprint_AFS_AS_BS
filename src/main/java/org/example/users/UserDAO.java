@@ -18,13 +18,16 @@ public class UserDAO {
              ResultSet rs = pstmt.executeQuery()) {
     
             while (rs.next()) {
-                int user_id = rs.getInt("user_id");
-                String username = rs.getString("user_username");
-                String email = rs.getString("user_email");
-                String role = rs.getString("user_role");
-    
-                // Adding user to the list
-                users.add(new Users(user_id, username, null, email, role));
+
+                Users user = new Users (
+                     rs.getInt("user_id"),
+                     rs.getString("user_username"),
+                     rs.getString("user_password"),
+                     rs.getString("user_email"),
+                     rs.getString("user_role")
+                );
+                users.add(user);
+
             }
         }
         return users; // No printing here

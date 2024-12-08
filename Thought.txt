@@ -2,3 +2,12 @@ User
  - Buyer
  - Seller
  - Admin (admin@example.com - admin123)
+
+
+ BUYER MENU: Browse Products seem to work. Add more and check back(seems good with more). Search product also seems to work. View product details seems to work. Exit works! TLDR: Buyer menu seems good!
+
+ SELLER MENU: Add Product works! Update works, but maybe add a way to hit enter if you want a field to have the same value. Delete Product seems to work, as does the View My Products. Exit works! TLDR: Try to improve Update Product, but everything else seems good.
+
+ ADMIN MENU: When viewing all users, it shows all the users twice. Viewing all Products seems to work. Maybe add more products and check back(added one, and it still looks nice!). I didn't check Delete user, as I'd like to add a test user just for the sake of deleting it(added, and it works). Exit works! TLDR: Try to improve View All Users, but everything else seems good.
+
+ Also a note for the menu: Can we have the area where we type in the options be more asthetic? Even if it's just adding an extra blank line between lines. This is not super high on list of priorities, but though I'd mention.

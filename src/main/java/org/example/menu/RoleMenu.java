@@ -457,6 +457,12 @@ public class RoleMenu {
         int userID = scanner.nextInt();
         scanner.nextLine();
 
+        // Prevent deletion of admin (user ID 1)
+        if (userID == 1) {
+            System.out.println("Error: Admin cannot be deleted.");
+            return;
+        }
+
         try {
             boolean isDeleted = userService.deleteUserById(userID);
             if (isDeleted) {

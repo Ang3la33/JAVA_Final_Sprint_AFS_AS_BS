@@ -10,33 +10,26 @@ public class UserDAO {
 
     // Fetch all users
     public List<Users> getAllUsers() throws SQLException {
-        String sql = "SELECT * FROM users";
         List<Users> users = new ArrayList<>();
-
+        String sql = "SELECT * FROM users";
+    
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
-
+    
             while (rs.next()) {
-                // Extract data from the ResultSet
                 int user_id = rs.getInt("user_id");
-                String user_username = rs.getString("user_username");
-                String user_email = rs.getString("user_email");
-                String user_role = rs.getString("user_role");
-
-                // Print user details
-                System.out.println("User ID: " + user_id);
-                System.out.println("Username: " + user_username);
-                System.out.println("Email: " + user_email);
-                System.out.println("Role: " + user_role);
-                System.out.println("------------------------");
-
-                // Add user to the list
-                users.add(new Users(user_id, user_username, null, user_email, user_role)); // Password excluded for security
+                String username = rs.getString("user_username");
+                String email = rs.getString("user_email");
+                String role = rs.getString("user_role");
+    
+                // Adding user to the list
+                users.add(new Users(user_id, username, null, email, role));
             }
         }
-        return users;
+        return users; // No printing here
     }
+    
 
     // Add a new user
     public void addUser(Users user) throws SQLException {

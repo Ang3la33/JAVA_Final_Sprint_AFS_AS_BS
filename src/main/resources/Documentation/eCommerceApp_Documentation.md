@@ -14,7 +14,21 @@
 ---
 
 ## Application Description
-This section should outline the purpose of the application and its key features.
+Welcome to our E-Commerce App! A command line platform designed to bring buyers, sellers and administrators together in one system.
+Whether you're looking to browse products, manage your inventory or over user activity, this application provides the tools you need
+in a simple, intuitive way.
+
+**Main Features**
+- **Buyers** Can explore products, search for specific items, and read detailed product information.
+- **Sellers** Have the ability to add new products, edit existing ones, or remove items that are no longer available.
+- **Admins** Oversee the platform, with the power to manage users, view all product, and maintain control of the system.
+
+This application was built with a focus on modularity and scalability, and showcases key principles of Object-Oriented Programming,
+like inheritance and polymorphism. Each user role comes with tailored menus and options, ensuring everyone has access to what they need.
+
+This application was collaboratively developed by **Brandon Shea**, **Adam Stevenson**, and **Angie Flynn-Smith**, for 
+Keyin College's Semester 3 Java final project.
+
 
 ---
 

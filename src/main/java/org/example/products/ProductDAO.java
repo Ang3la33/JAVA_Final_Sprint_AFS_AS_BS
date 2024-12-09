@@ -145,4 +145,19 @@ public class ProductDAO {
         }
         return productList;
     }
+
+    // Fetch the seller's name by their ID
+    public String getSellerNameById(int sellerId) throws SQLException {
+        String query = "SELECT user_username FROM users WHERE user_id = ? AND user_role = 'seller'";
+        try (Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, sellerId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("username");
+                }
+            }
+        }
+        return null;
+    }
 }

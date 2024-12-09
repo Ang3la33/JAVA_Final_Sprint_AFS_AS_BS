@@ -491,15 +491,14 @@ public class RoleMenu {
                 productService.getAllProducts().forEach(product -> {
                     try {
                         // Retrieve seller name using seller ID
-                        Users seller = userService.getUserById(product.getSeller_id());
-                        String sellerName = (seller != null) ? seller.getUser_username() : "Unkown Seller";
+                        String sellerName = productService.getSellerNameById(product.getSeller_id());
 
                         // Display product details
                         System.out.println("Product ID: " + product.getProd_id());
                         System.out.println("Name: " + product.getProd_name());
                         System.out.println("Price: $" + product.getProd_price());
                         System.out.println("Quantity: " + product.getProd_quantity());
-                        System.out.println("Seller Name: " + sellerName);
+                        System.out.println("Seller Name: " + (sellerName != null ? sellerName : "Unknown Seller"));
                         System.out.println("---------------------");
                     }
                     catch (SQLException e) {
@@ -510,4 +509,5 @@ public class RoleMenu {
                 System.out.println("Error fetching products: " + e.getMessage());
             }
         }
-    }
+}
+

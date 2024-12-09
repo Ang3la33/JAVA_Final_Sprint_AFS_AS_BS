@@ -45,4 +45,9 @@ public class ProductService {
     public List<Products> getProductsBySeller(int sellerId) throws SQLException {
         return productDAO.getProductsBySeller(sellerId);
     }
+
+    // Fetch sellers name using seller id
+    public String getSellerNameById(int sellerId) throws SQLException {
+        return productDAO.getSellerNameById(sellerId);
+    }
 }

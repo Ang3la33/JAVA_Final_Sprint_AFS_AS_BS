@@ -100,7 +100,7 @@ public class RoleMenu {
             Users newUser = new Users(username, hashedPassword, email, role);
 
             userService.addUser(newUser);
-            System.out.println("User registered successfully!");
+
         } catch (SQLException e) {
             System.out.println("Error registering user: " + e.getMessage());
         }

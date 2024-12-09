@@ -25,6 +25,7 @@ public class UserService {
         } catch (SQLException e) {
             throw new SQLException("Database error occurred while adding the user: " + e.getMessage(), e);
         }
+
     }
 
     // Update a user's role by their email

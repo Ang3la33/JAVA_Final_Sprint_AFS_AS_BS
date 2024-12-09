@@ -10,14 +10,15 @@ public class UserDAO {
 
     // Fetch all users
     public List<Users> getAllUsers() throws SQLException {
-        String sql = "SELECT * FROM users";
         List<Users> users = new ArrayList<>();
-
+        String sql = "SELECT * FROM users";
+    
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
-
+    
             while (rs.next()) {
+
                 Users user = new Users (
                      rs.getInt("user_id"),
                      rs.getString("user_username"),
@@ -29,8 +30,9 @@ public class UserDAO {
 
             }
         }
-        return users;
+        return users; // No printing here
     }
+    
 
     // Add a new user
     public void addUser(Users user) throws SQLException {

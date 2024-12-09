@@ -73,13 +73,13 @@ public class ProductDAO {
     public List<Products> searchProducts(String name) throws SQLException {
         String sql = "SELECT * FROM products WHERE prod_name ILIKE ?";
         List<Products> productList = new ArrayList<>();
-
+    
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
+    
             pstmt.setString(1, "%" + name + "%");
             ResultSet rs = pstmt.executeQuery();
-
+    
             while (rs.next()) {
                 productList.add(new Products(
                         rs.getInt("prod_id"),
@@ -92,6 +92,7 @@ public class ProductDAO {
         }
         return productList;
     }
+    
 
     // Update a product
     public void updateProduct(Products product) throws SQLException {
@@ -146,11 +147,12 @@ public class ProductDAO {
         return productList;
     }
 
+
     // Fetch the seller's name by their ID
     public String getSellerNameById(int sellerId) throws SQLException {
         String query = "SELECT user_username FROM users WHERE user_id = ? AND user_role = 'seller'";
         try (Connection conn = DatabaseConnection.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, sellerId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -159,5 +161,18 @@ public class ProductDAO {
             }
         }
         return null;
+    }
+
+    public void updateProductInDatabase(String sql, Products product) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, product.getProd_name());
+            pstmt.setDouble(2, product.getProd_price());
+            pstmt.setInt(3, product.getProd_quantity());
+            pstmt.setInt(4, product.getProd_id());
+            pstmt.setInt(5, product.getSeller_id());
+            pstmt.executeUpdate();
+        }
     }
 }

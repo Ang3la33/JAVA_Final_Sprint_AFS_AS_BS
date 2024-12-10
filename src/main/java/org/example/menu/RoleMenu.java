@@ -363,28 +363,30 @@ public class RoleMenu {
     }
 
         // Method to view all products (Admin Menu)
-        private void viewAllProducts () {
+        private void viewAllProducts() {
             try {
                 System.out.println("List of all products:");
                 System.out.println("----------------------");
                 productService.getAllProducts().forEach(product -> {
                     try {
-
+                        // Fetch seller name using product's seller ID
+                        String sellerName = productService.getSellerNameById(product.getSeller_id());
+        
                         // Display product details
                         System.out.println("Product ID: " + product.getProd_id());
                         System.out.println("Name: " + product.getProd_name());
                         System.out.println("Price: $" + product.getProd_price());
                         System.out.println("Quantity: " + product.getProd_quantity());
-                        System.out.println("Seller Name: " + productService.getSellerNameById(product.getSeller_id());;
+                        System.out.println("Seller Name: " + (sellerName != null ? sellerName : "Unknown Seller"));
                         System.out.println("---------------------");
-                    }
-                    catch (SQLException e) {
-                        System.out.println("Error fetching seller details for Product ID " + product.getProd_id() + ":" + e.getMessage());
+                    } catch (SQLException e) {
+                        System.out.println("Error fetching seller name for Product ID " + product.getProd_id() + ": " + e.getMessage());
                     }
                 });
             } catch (SQLException e) {
                 System.out.println("Error fetching products: " + e.getMessage());
             }
         }
+        
 }
 

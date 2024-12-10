@@ -1,8 +1,13 @@
 package org.example.products;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
+
+import org.example.database.DatabaseConnection;
 
 public class ProductService {
     private ProductDAO productDAO;
@@ -42,6 +47,7 @@ public class ProductService {
         }
     }
 
+    
     public void deleteProduct(int productId, int sellerId) throws SQLException {
         productDAO.deleteProduct(productId, sellerId);
     }
@@ -123,7 +129,18 @@ public class ProductService {
     }
 
     // Fetch sellers name using seller id
-    public String getSellerNameById(int sellerId) throws SQLException {
-        return productDAO.getSellerNameById(sellerId);
+public String getSellerNameById(int sellerId) throws SQLException {
+    String sql = "SELECT user_username FROM users WHERE user_id = ?";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setInt(1, sellerId);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return rs.getString("user_username"); // Fetch seller username
+        }
     }
+    return null; // No seller found
+}
+
 }

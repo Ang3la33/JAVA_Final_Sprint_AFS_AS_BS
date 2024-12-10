@@ -156,7 +156,7 @@ public class ProductDAO {
             stmt.setInt(1, sellerId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return rs.getString("username");
+                    return rs.getString("user_username");
                 }
             }
         }

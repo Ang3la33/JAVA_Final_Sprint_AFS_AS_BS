@@ -377,7 +377,7 @@ public class RoleMenu {
                         System.out.println("Name: " + product.getProd_name());
                         System.out.println("Price: $" + product.getProd_price());
                         System.out.println("Quantity: " + product.getProd_quantity());
-                        System.out.println("Seller Name: " + (sellerName != null ? sellerName : "Unknown Seller"));
+                        System.out.println("Seller Name: " + sellerName;
                         System.out.println("---------------------");
                     }
                     catch (SQLException e) {

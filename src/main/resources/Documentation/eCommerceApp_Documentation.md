@@ -15,7 +15,7 @@
 
 ## Application Description
 Welcome to our E-Commerce App! A command line platform designed to bring buyers, sellers and administrators together in one system.
-Whether you're looking to browse products, manage your inventory or over user activity, this application provides the tools you need
+Whether you're looking to browse products, manage your inventory or user activity, this application provides the tools you need
 in a simple, intuitive way.
 
 **Main Features**

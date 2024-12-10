@@ -369,15 +369,13 @@ public class RoleMenu {
                 System.out.println("----------------------");
                 productService.getAllProducts().forEach(product -> {
                     try {
-                        // Retrieve seller name using seller ID
-                        String sellerName = productService.getSellerNameById(product.getSeller_id());
 
                         // Display product details
                         System.out.println("Product ID: " + product.getProd_id());
                         System.out.println("Name: " + product.getProd_name());
                         System.out.println("Price: $" + product.getProd_price());
                         System.out.println("Quantity: " + product.getProd_quantity());
-                        System.out.println("Seller Name: " + sellerName;
+                        System.out.println("Seller Name: " + productService.getSellerNameById(product.getSeller_id());;
                         System.out.println("---------------------");
                     }
                     catch (SQLException e) {

@@ -190,7 +190,7 @@ public class RoleMenu {
                System.out.println("Product Name: " + product.getProd_name());
                System.out.println("ID: " + product.getSeller_id());
                System.out.println("Price: $" + product.getProd_price());
-               System.out.println("Quantity: " + product.getProd_price());
+               System.out.println("Quantity: " + product.getProd_quantity());
                System.out.println("Seller: " + (sellerName != null ? sellerName : "Unknown Seller"));
                System.out.println("-----------------------");
            } else {

@@ -355,7 +355,7 @@ public class RoleMenu {
                 System.out.println("User deleted successfully!");
             } else {
 
-                System.out.println("User with ID " + userID + "not found.");
+                System.out.println("User with ID " + userID + " not found.");
             }
         } catch (SQLException e) {
             System.out.println("Error deleting user: " + e.getMessage());
